@@ -155,6 +155,20 @@ The working copy is deleted when the session ends. Copies left behind by a
 crashed process are cleaned up on the next start, unless they hold changes
 that never reached Overleaf, which are kept for you.
 
+## Docker
+
+The server needs only git and network access, so it runs fully in a container.
+Pass the token by environment and pin the project by id:
+
+```bash
+docker build -t overleaf-mcp .
+docker run --rm -i -e OVERLEAF_GIT_TOKEN=<token> -e OVERLEAF_PROJECT=<project-id> overleaf-mcp
+```
+
+Use `docker run --rm -i ...` as the `command` in a client config. To use a
+registry of several projects instead, mount a folder holding `projects.json`
+at `/data`.
+
 ## Configuration
 
 | Variable | Default | Meaning |

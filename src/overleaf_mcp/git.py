@@ -60,6 +60,20 @@ def _classify(stderr: str) -> tuple[str, str]:
     return ("GIT_ERROR", "")
 
 
+def summarise_error(text: str) -> str:
+    """The most informative line of git's stderr: the first 'fatal:'/'error:' line.
+
+    The last line is often a trailing hint ('...and the repository exists.')
+    that says nothing on its own.
+    """
+    lines = [l.strip() for l in text.strip().splitlines() if l.strip()]
+    for prefix in ("fatal:", "error:", "remote:"):
+        for l in lines:
+            if l.lower().startswith(prefix):
+                return l
+    return lines[0] if lines else ""
+
+
 class Git:
     def __init__(self, token: str | None, timeout: float = 120.0):
         self.token = token
@@ -103,7 +117,7 @@ class Git:
         res = GitResult(proc.returncode, proc.stdout, proc.stderr)
         if check and proc.returncode != 0:
             code, remedy = _classify(proc.stderr)
-            msg = (proc.stderr.strip() or proc.stdout.strip() or f"git {args[0]} failed").splitlines()[-1]
+            msg = self._scrub(summarise_error(proc.stderr or proc.stdout) or f"git {args[0]} failed")
             raise GitError(code, f"git {args[0]}: {msg}", remedy, stderr=self._scrub(proc.stderr))
         return res
 

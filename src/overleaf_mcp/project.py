@@ -22,7 +22,7 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
 from .config import ConfigError, ProjectEntry, Registry, Settings, load_token, parse_project_id
-from .git import Git, GitError, _classify
+from .git import Git, GitError, _classify, summarise_error
 
 TEXT_EXTENSIONS = {
     ".tex", ".bib", ".cls", ".sty", ".bst", ".bbx", ".cbx", ".lbx", ".txt", ".md",
@@ -150,7 +150,7 @@ class Workspace:
             err = r.stderr.lower()
             if not ("rejected" in err or "fetch first" in err or "non-fast-forward" in err):
                 code, remedy = _classify(r.stderr)
-                raise ToolError(code, f"Push to Overleaf failed: {r.stderr.strip().splitlines()[-1] if r.stderr.strip() else 'unknown error'}",
+                raise ToolError(code, f"Push to Overleaf failed: {self.git._scrub(summarise_error(r.stderr)) or 'unknown error'}",
                                 remedy or "Your change is committed locally; call push_changes to retry.")
             # Someone edited in Overleaf meanwhile: rebase on top and try again.
             pull = self.git.run(["pull", "--rebase", "--quiet", "origin"], cwd=self.root, check=False)

@@ -265,3 +265,12 @@ def test_rename_alias(env):
     assert call("attach_project", project="thesis")["error"] == "NOT_REGISTERED"
     with pytest.raises(ConfigError):
         reg.rename("phd", "other")  # taken
+
+
+def test_git_error_message_is_the_fatal_line(env):
+    from overleaf_mcp.git import summarise_error
+
+    stderr = ("fatal: detected dubious ownership in repository at '/x'\n"
+              "fatal: Could not read from remote repository.\n\n"
+              "Please make sure you have the correct access rights\nand the repository exists.\n")
+    assert summarise_error(stderr).startswith("fatal: detected dubious ownership")
