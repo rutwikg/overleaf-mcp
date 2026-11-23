@@ -1,0 +1,26 @@
+[project]
+name = "overleaf-mcp"
+version = "0.1.0"
+description = "MCP server that lets Claude edit one attached Overleaf project via Overleaf's Git integration"
+readme = "README.md"
+authors = [
+    { name = "Rutwik Gulakala", email = "63323403+rutwikg@users.noreply.github.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.10",
+]
+
+[project.scripts]
+overleaf-mcp = "overleaf_mcp.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]
+[tool.pytest.ini_options]
+pythonpath = ["tests"]
