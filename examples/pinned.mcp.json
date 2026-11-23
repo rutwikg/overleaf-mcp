@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "overleaf": {
-      "command": "D:\Work\AgenticAI\OverleafMCP\.venv\Scripts\overleaf-mcp.exe",
+      "command": "C:\path\to\overleaf-mcp\.venv\Scripts\overleaf-mcp.exe",
       "env": { "OVERLEAF_PROJECT": "thesis" }
     }
   }

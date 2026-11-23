@@ -1,5 +1,7 @@
 # overleaf-mcp
 
+[![License](https://img.shields.io/badge/license-AGPL--3.0-blue)](LICENSE)
+
 An MCP server that lets Claude (Claude Code and Claude Desktop) read and edit
 **one Overleaf project at a time**. Edits are pushed straight to Overleaf and
 appear in your browser editor within seconds.
@@ -38,11 +40,12 @@ matters, deny shell reads of `~/.overleaf-mcp` in your Claude Code permissions.
 ### 1. Install
 
 ```bash
-cd D:\Work\AgenticAI\OverleafMCP
+git clone https://github.com/rutwikg/overleaf-mcp C:\path\to\overleaf-mcp
+cd C:\path\to\overleaf-mcp
 uv sync
 ```
 
-The server executable is `D:\Work\AgenticAI\OverleafMCP\.venv\Scripts\overleaf-mcp.exe`.
+The server executable is `C:\path\to\overleaf-mcp\.venv\Scripts\overleaf-mcp.exe`.
 Always give clients this full path; they do not inherit your shell's PATH.
 
 ### 2. Store your Overleaf Git token
@@ -51,7 +54,7 @@ In Overleaf: **Account Settings > Git integration > Generate token**. Then, in a
 terminal (the token is read with hidden input and saved to `~/.overleaf-mcp/token`):
 
 ```bash
-D:\Work\AgenticAI\OverleafMCP\.venv\Scripts\overleaf-mcp.exe login
+C:\path\to\overleaf-mcp\.venv\Scripts\overleaf-mcp.exe login
 ```
 
 ### 3. Register the projects Claude may use
@@ -60,7 +63,7 @@ The alias is what you will say to Claude. The URL is the one in your browser
 when the project is open.
 
 ```bash
-D:\Work\AgenticAI\OverleafMCP\.venv\Scripts\overleaf-mcp.exe add thesis https://www.overleaf.com/project/0123456789abcdef01234567
+C:\path\to\overleaf-mcp\.venv\Scripts\overleaf-mcp.exe add thesis https://www.overleaf.com/project/0123456789abcdef01234567
 ```
 
 `add` checks that the token can reach the project. Other commands: `list`, `rename OLD NEW`,
@@ -71,7 +74,7 @@ D:\Work\AgenticAI\OverleafMCP\.venv\Scripts\overleaf-mcp.exe add thesis https://
 Register the server once, for all your sessions:
 
 ```bash
-claude mcp add --scope user overleaf -- D:\Work\AgenticAI\OverleafMCP\.venv\Scripts\overleaf-mcp.exe
+claude mcp add --scope user overleaf -- C:\path\to\overleaf-mcp\.venv\Scripts\overleaf-mcp.exe
 ```
 
 Then, in any session, either say *"attach my thesis project"* or use the slash
@@ -180,8 +183,12 @@ commit name.
 
 ```bash
 uv run pytest
-npx @modelcontextprotocol/inspector D:\Work\AgenticAI\OverleafMCP\.venv\Scripts\overleaf-mcp.exe
+npx @modelcontextprotocol/inspector C:\path\to\overleaf-mcp\.venv\Scripts\overleaf-mcp.exe
 ```
 
 Tests run against a fake Overleaf made of bare Git repos over `file://`; only
 the transport is faked.
+
+## Licence
+
+AGPL-3.0-or-later. See [LICENSE](LICENSE).
